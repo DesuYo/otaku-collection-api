@@ -32,7 +32,6 @@ module.exports = class {
   async patch (where, fields) {
     try {
       const { _id, ...rest } = await this.collection.findOne(where)
-      console.log('USER', await this.collection.findOne(where))
       await this._validate({ ...rest, ...fields })
       await this.collection.updateOne({ _id }, { $set: fields })
       return true
