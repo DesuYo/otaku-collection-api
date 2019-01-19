@@ -7,11 +7,11 @@ module.exports = class {
    * @param {Db} dbInstance
    */
   constructor (dbInstance) {
-    this.users = dbInstance.collection('users')
+    this.collection = dbInstance.collection('users')
   }
 
   async initIndexes () {
-    return this.users.createIndex({ username: 1, email: 1 }, { unique: true })
+    return this.collection.createIndex({ username: 1, email: 1 }, { unique: true })
   }
 
   async _validate (doc) {
@@ -22,7 +22,7 @@ module.exports = class {
   async add (doc) {
     try {
       await this._validate(doc)
-      return (await this.users.insertOne(doc))
+      return (await this.collection.insertOne(doc))
         .insertedId
     } catch (error) {
       handleError(error)
@@ -31,10 +31,11 @@ module.exports = class {
 
   async patch (where, fields) {
     try {
-      const { _id, rest } = await this.users.findOne(where)
+      const { _id, ...rest } = await this.collection.findOne(where)
+      console.log('USER', await this.collection.findOne(where))
       await this._validate({ ...rest, ...fields })
-      return (await this.users.updateOne({ _id }, { $set: fields }))
-        .upsertedId._id
+      await this.collection.updateOne({ _id }, { $set: fields })
+      return true
     } catch (error) {
       handleError(error)
     }

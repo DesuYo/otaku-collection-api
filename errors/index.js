@@ -1,14 +1,12 @@
 class ValidationError extends Error {
   constructor (details) {
-    super('Validation error is occurred')
-    this.details = details
+    super(JSON.stringify(details))
   }
 }
 
 class DuplicateDocumentError extends Error {
   constructor (details) {
-    super('Duplicate document error is occurred')
-    this.details = details
+    super(JSON.stringify(details))
   }
 }
 
