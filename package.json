@@ -1,0 +1,25 @@
+{
+  "name": "otakucollection-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ajv": "^6.7.0",
+    "apollo-server-express": "^2.3.1",
+    "graphql": "^14.0.2",
+    "graphql-tools": "^4.0.3",
+    "mongodb": "^3.1.10"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {
+    "jest": "^23.6.0"
+  },
+  "description": ""
+}
