@@ -1,4 +1,4 @@
-exports.ValidationError = class extends Error {
+class ValidationError extends Error {
   constructor (details) {
     super('Validation error is occurred')
     this.details = details
@@ -12,8 +12,14 @@ class DuplicateDocumentError extends Error {
   }
 }
 
-exports.handleError = err => {
+const handleError = err => {
   if (err.name === 'MongoError' && err.code === 11000)
     throw new DuplicateDocumentError(err)
   else throw err
-} 
+}
+
+module.exports = {
+  ValidationError,
+  DuplicateDocumentError,
+  handleError
+}
