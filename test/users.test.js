@@ -8,7 +8,7 @@ const mongoClient = new MongoClient('mongodb://localhost:27017/test', { useNewUr
  */
 let users = null
 
-describe('add user', () => {
+describe('test user functionality', () => {
   
   beforeAll (async () => {
     users = new UsersModel((await mongoClient.connect()).db())
