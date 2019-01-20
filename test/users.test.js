@@ -1,6 +1,6 @@
 const { MongoClient, ObjectID, Db } = require('mongodb')
 const UsersModel = require('../models/users.model')
-const { ValidationError, DuplicateDocumentError } = require('../errors')
+const { ValidationError, DuplicateDocumentError, NotFoundError } = require('../errors')
 
 const mongoClient = new MongoClient('mongodb://localhost:27017/test', { useNewUrlParser: true })
 /**
@@ -49,6 +49,14 @@ describe('add user', () => {
       .resolves.toBeInstanceOf(ObjectID)
   })
 
+  it('Try to update not existing user. Should throw not found error.', async () => {
+    await expect(users.patch(
+      { email: '1@gmail.com' },
+      { username: 'Mikasa' }
+    ))
+      .rejects.toThrow(NotFoundError)
+  })
+
   it('Try to update user with invalid info. Should throw validation error.', async () => {
     await expect(users.patch(
       { username: 'Mayushi' },
@@ -63,11 +71,8 @@ describe('add user', () => {
   it('Should update existing user.', async () => {
     await expect(users.patch(
       { username: 'Mayushi' },
-      { 
-        password: 'new2VALID8Pass9*',
-        email: 'newemail@gmail.com'
-      }
+      { email: 'newemail@gmail.com' }
     ))
-      .resolves.toBe(true)
+      .resolves.toBeInstanceOf(ObjectID)
   })
 })
