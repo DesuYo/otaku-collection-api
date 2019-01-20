@@ -3,6 +3,7 @@ const { ValidationError } = require('../errors')
 
 ajv.addSchema([
   require('./user.draft.json'),
+  require('./comment.draft.json')
   //...
 ])
 
