@@ -1,6 +1,9 @@
 const { Db } = require('mongodb')
-const ajv = require('../validation')
-const { ValidationError, handleError } = require('../errors')
+const validate = require('../validation')
+const { hash } = require('bcryptjs')
+const { NotFoundError, handleError } = require('../errors')
+
+const schemaPath = 'otakucollection/user'
 
 module.exports = class {
   /**
@@ -13,16 +16,15 @@ module.exports = class {
   async initIndexes () {
     return this.collection.createIndex({ username: 1, email: 1 }, { unique: true })
   }
-
-  async _validate (doc) {
-    await ajv.validate('otakucollection/user', doc)
-    if (ajv.errors) throw new ValidationError(ajv.errors)
-  }
   
   async add (doc) {
     try {
-      await this._validate(doc)
-      return (await this.collection.insertOne(doc))
+      const { password, ...profile } = doc
+      await validate(schemaPath, { password, profile })
+      return (await this.collection.insertOne({
+        ...profile,
+        password: await hash(password, 12) 
+      }))
         .insertedId
     } catch (error) {
       handleError(error)
@@ -31,9 +33,23 @@ module.exports = class {
 
   async patch (where, fields) {
     try {
-      const { _id, ...rest } = await this.collection.findOne(where)
-      await this._validate({ ...rest, ...fields })
+      const user = await this.collection.findOne(where)
+      if (!user) throw new NotFoundError({ message: 'User not found.' })
+      const { _id, password, ...rest } = user
+      await validate(`${schemaPath}#/properties/profile`, { ...rest, ...fields })
       await this.collection.updateOne({ _id }, { $set: fields })
+      return _id
+    } catch (error) {
+      handleError(error)
+    }
+  }
+
+  async setPassword (where, password) {
+    try {
+      await validate(`${schemaPath}#/properties/password`)
+      await this.collection.updateOne(where, { $set: { 
+        password: await hash(password, 12) 
+      }})
       return true
     } catch (error) {
       handleError(error)

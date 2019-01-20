@@ -1,6 +1,6 @@
 const { MongoClient, ObjectID } = require('mongodb')
 const UsersModel = require('../models/users.model')
-const { ValidationError, DuplicateDocumentError } = require('../errors')
+const { ValidationError, DuplicateDocumentError, NotFoundError } = require('../errors')
 
 require('dotenv').config()
 const mongoClient = new MongoClient(process.env.DB_URI || 'mongodb://localhost:27017/test', 
@@ -13,8 +13,7 @@ let users = null
 describe('test user functionality', () => {
   
   beforeAll (async () => {
-    process.DB_CLIENT = (await mongoClient.connect()).db()
-    users = new UsersModel(process.DB_CLIENT)
+    users = new UsersModel((await mongoClient.connect()).db())
     await users.collection.deleteMany({})
     await users.initIndexes()
   })
@@ -52,6 +51,14 @@ describe('test user functionality', () => {
       .resolves.toBeInstanceOf(ObjectID)
   })
 
+  it('Try to update not existing user. Should throw not found error.', async () => {
+    await expect(users.patch(
+      { email: '1@gmail.com' },
+      { username: 'Mikasa' }
+    ))
+      .rejects.toThrow(NotFoundError)
+  })
+
   it('Try to update user with invalid info. Should throw validation error.', async () => {
     await expect(users.patch(
       { username: 'Mayushi' },
@@ -66,11 +73,8 @@ describe('test user functionality', () => {
   it('Should update existing user.', async () => {
     await expect(users.patch(
       { username: 'Mayushi' },
-      { 
-        password: 'new2VALID8Pass9*',
-        email: 'newemail@gmail.com'
-      }
+      { email: 'newemail@gmail.com' }
     ))
-      .resolves.toBe(true)
+      .resolves.toBeInstanceOf(ObjectID)
   })
 })

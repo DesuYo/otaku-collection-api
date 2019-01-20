@@ -1,6 +1,12 @@
-const AJV = require('ajv')()
+const ajv = require('ajv')()
+const { ValidationError } = require('../errors')
 
-module.exports = AJV.addSchema([
+ajv.addSchema([
   require('./user.draft.json'),
   //...
 ])
+
+module.exports = async (path, doc) => {
+  await ajv.validate(path, doc)
+  if (ajv.errors) throw new ValidationError(ajv.errors)
+}

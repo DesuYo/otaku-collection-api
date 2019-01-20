@@ -1,14 +1,14 @@
-class ValidationError extends Error {
+class AwesomeError extends Error {
   constructor (details) {
     super(JSON.stringify(details))
   }
 }
 
-class DuplicateDocumentError extends Error {
-  constructor (details) {
-    super(JSON.stringify(details))
-  }
-}
+class ValidationError extends AwesomeError {}
+
+class NotFoundError extends AwesomeError {}
+
+class DuplicateDocumentError extends AwesomeError {}
 
 const handleError = err => {
   if (err.name === 'MongoError' && err.code === 11000)
@@ -18,6 +18,7 @@ const handleError = err => {
 
 module.exports = {
   ValidationError,
+  NotFoundError,
   DuplicateDocumentError,
   handleError
 }
