@@ -1,19 +1,16 @@
-const { MongoClient, ObjectID } = require('mongodb')
+const { ObjectID } = require('mongodb')
 const UsersModel = require('../models/users.model')
 const { ValidationError, DuplicateDocumentError } = require('../errors')
 
-//require('dotenv').config()
-const mongoClient = new MongoClient(process.env.DB_URI || 'mongodb://localhost:27017/test', 
-  { useNewUrlParser: true })
 /**
  * @type {UsersModel}
  */
 let users = null
 
-describe('add user', () => {
+describe('test user functionality', () => {
   
   beforeAll (async () => {
-    users = new UsersModel((await mongoClient.connect()).db())
+    users = new UsersModel(process.DB_CLIENT)
     await users.collection.deleteMany({})
     await users.initIndexes()
   })

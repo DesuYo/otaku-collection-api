@@ -5,6 +5,9 @@
   "scripts": {
     "test": "jest --detectOpenHandles"
   },
+  "jest": {
+    "globalSetup": "./test-setup/setup.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
