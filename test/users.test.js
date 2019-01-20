@@ -1,8 +1,10 @@
-const { MongoClient, ObjectID, Db } = require('mongodb')
+const { MongoClient, ObjectID } = require('mongodb')
 const UsersModel = require('../models/users.model')
 const { ValidationError, DuplicateDocumentError } = require('../errors')
 
-const mongoClient = new MongoClient('mongodb://localhost:27017/test', { useNewUrlParser: true })
+//require('dotenv').config()
+const mongoClient = new MongoClient(process.env.DB_URI || 'mongodb://localhost:27017/test', 
+  { useNewUrlParser: true })
 /**
  * @type {UsersModel}
  */
