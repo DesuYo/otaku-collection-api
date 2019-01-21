@@ -12,18 +12,14 @@ module.exports = class {
     this.collection = dbInstance.collection('comments')
   }
 
-  async initIndexes() {
-    return this.collection.createIndex({
-      createdAt: 1
-    }, {
-      unique: true
-    })
-  }
-
-  async add (doc) {
+  async add (doc, author) {
     try {
       await validate(schemaPath, doc)
-      return (await this.collection.insertOne(doc))
+      return (await this.collection.insertOne({
+        ...doc,
+        createdAt: new Date(),
+        author
+      }))
         .insertedId
     }
     catch (error) {
@@ -35,8 +31,8 @@ module.exports = class {
     try {
       const comment = await this.collection.findOne(where)
       if (!comment) throw new NotFoundError({ message: 'Comment not found.' })
-      const { _id, text } = comment
-      await validate(schemaPath, { text, ...fields })
+      const { _id } = comment
+      await validate(schemaPath, fields)
       await this.collection.updateOne({ _id }, { $set: fields })
       return _id
     } catch (error) {

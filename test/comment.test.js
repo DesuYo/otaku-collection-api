@@ -15,7 +15,6 @@ describe('test comment functionality', () => {
   beforeAll (async () => {
     comments = new CommentsModel((await mongoClient.connect()).db())
     await comments.collection.deleteMany({})
-    await comments.initIndexes()
   })
 
   it('Should throw validation error.', async () => {
@@ -31,33 +30,12 @@ describe('test comment functionality', () => {
       .rejects.toThrow(ValidationError)
   })
 
-  it('Should prevent duplicate.', async () => {
-    const createdAt = new Date()
-    const duplicateFields = {
-      text: 'rofl',
-      createdAt,
-      author: {
-        username: 'baka',
-        email: 'pahom@gmail.com'
-      }
-    }
-    await comments.add({ 
-      ...duplicateFields
-    })
-    await expect(comments.add({ 
-      ...duplicateFields
-    }))
-      .rejects.toThrow(DuplicateDocumentError)
-  })
-
   it('Should add new comment.', async () => {
     await expect(comments.add({
-      text: 'rofl',
-      createdAt: new Date(),
-      author: {
-        username: 'senpai',
-        email: 'thisemailshouldwork@gmail.com'
-      }
+      text: 'rofl'
+    }, {
+      username: 'senpai',
+      email: 'thisemailshouldwork@gmail.com'
     }))
       .resolves.toBeInstanceOf(ObjectID)
   })
@@ -65,7 +43,7 @@ describe('test comment functionality', () => {
   it('Try to update not existing comment. Should throw not found error.', async () => {
     await expect(comments.patch(
       {
-        'author.username': 'rofl'
+        'author.username': 'baka'
       }, {
         text: 'nice comment'
       }
@@ -78,7 +56,7 @@ describe('test comment functionality', () => {
       {
         'author.username': 'senpai'
       }, {
-        text: ''
+        text: null
       }
     ))
       .rejects.toThrow(ValidationError)
@@ -87,7 +65,7 @@ describe('test comment functionality', () => {
   it('Should update existing comment.', async () => {
     await expect(comments.patch(
       { 
-        'author.username': 'baka'
+        'author.username': 'senpai'
       }, {
         text: 'nice anime))0'
       }
