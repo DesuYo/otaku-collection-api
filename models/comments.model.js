@@ -39,4 +39,20 @@ module.exports = class {
       handleError(error)
     }
   }
+
+  async addReply (doc, author, receiver) {
+    try {
+      await validate(schemaPath, doc)
+      return (await this.collection.insertOne({
+        ...doc,
+        createdAt: new Date(),
+        author,
+        receiver
+      }))
+        .insertedId
+    }
+    catch (error) {
+      handleError(error)
+    }
+  }
 }

@@ -1,6 +1,6 @@
 const { MongoClient, ObjectID } = require('mongodb')
 const CommentsModel = require('../models/comments.model')
-const { ValidationError, DuplicateDocumentError, NotFoundError } = require('../errors')
+const { ValidationError, NotFoundError } = require('../errors')
 
 require('dotenv').config()
 const mongoClient = new MongoClient(process.env.DB_URI || 'mongodb://localhost:27017/test', 
@@ -33,6 +33,19 @@ describe('test comment functionality', () => {
   it('Should add new comment.', async () => {
     await expect(comments.add({
       text: 'rofl'
+    }, {
+      username: 'senpai',
+      email: 'thisemailshouldwork@gmail.com'
+    }))
+      .resolves.toBeInstanceOf(ObjectID)
+  })
+
+  it('Should add new reply.', async () => {
+    await expect(comments.addReply({
+      text: 'nice anime reply'
+    }, {
+      username: 'saitama',
+      email: 'onepunch@gmail.com'
     }, {
       username: 'senpai',
       email: 'thisemailshouldwork@gmail.com'
