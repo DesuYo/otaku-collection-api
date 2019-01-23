@@ -54,35 +54,49 @@ describe('test comment functionality', () => {
   })
 
   it('Try to update not existing comment. Should throw not found error.', async () => {
-    await expect(comments.patch(
-      {
-        'author.username': 'baka'
-      }, {
-        text: 'nice comment'
-      }
-    ))
-      .rejects.toThrow(NotFoundError)
+    await expect(comments.patch({
+      'author.username': 'baka'
+    }, {
+      text: 'nice comment'
+    }))
+    .rejects.toThrow(NotFoundError)
   })
 
   it('Try to update comment with invalid info. Should throw validation error.', async () => {
-    await expect(comments.patch(
-      {
-        'author.username': 'senpai'
-      }, {
-        text: null
-      }
-    ))
-      .rejects.toThrow(ValidationError)
+    await expect(comments.patch({
+      'author.username': 'senpai'
+    }, {
+      text: null
+    }))
+    .rejects.toThrow(ValidationError)
   })
 
   it('Should update existing comment.', async () => {
-    await expect(comments.patch(
-      { 
-        'author.username': 'senpai'
-      }, {
-        text: 'nice anime))0'
-      }
-    ))
-      .resolves.toBeInstanceOf(ObjectID)
+    await expect(comments.patch({ 
+      'author.username': 'senpai'
+    }, {
+      text: 'nice anime))0'
+    }))
+    .resolves.toBeInstanceOf(ObjectID)
+  })
+
+  it('Should switch comment\'s like.', async () => {
+    await expect(comments.switchLike({
+      _id: ObjectID('5c48ab70747b0c319317e5c5')
+    }, {
+      username: 'saitama',
+      email: 'onepunch@gmail.com'
+    }))
+    .resolves.toBeInstanceOf(ObjectID)
+  })
+
+  it('Should switch comment\'s dislike.', async () => {
+    await expect(comments.switchDislike({
+      _id: ObjectID('5c48ab70747b0c319317e5c5')
+    }, {
+      username: 'saitama',
+      email: 'onepunch@gmail.com'
+    }))
+    .resolves.toBeInstanceOf(ObjectID)
   })
 })
