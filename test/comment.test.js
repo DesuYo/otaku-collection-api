@@ -82,7 +82,7 @@ describe('test comment functionality', () => {
 
   it('Should switch comment\'s like.', async () => {
     await expect(comments.switchLike({
-      _id: ObjectID('5c48ab70747b0c319317e5c5')
+      _id: ObjectID('5c48d9dde55443356a582495')
     }, {
       username: 'saitama',
       email: 'onepunch@gmail.com'
@@ -92,10 +92,10 @@ describe('test comment functionality', () => {
 
   it('Should switch comment\'s dislike.', async () => {
     await expect(comments.switchDislike({
-      _id: ObjectID('5c48ab70747b0c319317e5c5')
+      _id: ObjectID('5c48d9dde55443356a582495')
     }, {
-      username: 'saitama',
-      email: 'onepunch@gmail.com'
+      username: 'baka',
+      email: 'simpledude@gmail.com'
     }))
     .resolves.toBeInstanceOf(ObjectID)
   })

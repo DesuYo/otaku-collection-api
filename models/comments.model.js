@@ -66,10 +66,8 @@ module.exports = class {
       like 
       ? await this.collection.updateOne({ _id }, { $pull: { likes: author }})
       : await this.collection.updateOne({ _id }, { $push: { likes: author }})
-      const oppositeDislike = await this.collection.find({ ...where, dislikes: author })
-      oppositeDislike
-      ? await this.collection.updateOne({ _id }, { $pull: { dislikes: author }})
-      : null
+      const oppositeDislike = await this.collection.find({ ...where, dislikes: author }).count()
+      if (oppositeDislike) await this.collection.updateOne({ _id }, { $pull: { dislikes: author }})
       return _id
     }
     catch (error) {
@@ -86,10 +84,8 @@ module.exports = class {
       dislike 
       ? await this.collection.updateOne({ _id }, { $pull: { dislikes: author }})
       : await this.collection.updateOne({ _id }, { $push: { dislikes: author }})
-      const oppositeLike = await this.collection.find({ ...where, likes: author })
-      oppositeLike
-      ? await this.collection.updateOne({ _id }, { $pull: { likes: author }})
-      : null
+      const oppositeLike = await this.collection.find({ ...where, likes: author }).count()
+      if (oppositeLike) await this.collection.updateOne({ _id }, { $pull: { likes: author }})
       return _id
     }
     catch (error) {
