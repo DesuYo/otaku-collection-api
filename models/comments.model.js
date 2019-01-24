@@ -40,17 +40,32 @@ module.exports = class {
     }
   }
 
-  async addReply (doc, author, receiver) {
+  async delete(where) {
     try {
-      await validate(schemaPath, doc)
+      const comment = await this.collection.findOne(where)
+      if (!comment) throw new NotFoundError({ message: 'Comment not found.' })
+      const { _id } = comment
+      await this.collection.deleteOne({ _id })
+      return _id
+    }
+    catch (error) {
+      handleError(error)
+    }
+  }
+
+  async addReply (where, fields, author) {
+    try {
+      const comment = await this.collection.findOne(where)
+      if (!comment) throw new NotFoundError({ message: 'Comment not found.' })
+      await validate(schemaPath, fields)
       const reply = {
-        ...doc,
+        ...fields,
         createdAt: new Date(),
         author
       }
-      await this.collection.updateOne({ author: receiver}, { $push: { replies: reply }})
-      return (await this.collection.insertOne(reply))
-        .insertedId
+      const { _id } = comment
+      await this.collection.updateOne({ _id }, { $push: { replies: reply }})
+      return _id
     }
     catch (error) {
       handleError(error)

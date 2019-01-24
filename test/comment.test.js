@@ -42,14 +42,13 @@ describe('test comment functionality', () => {
 
   it('Should add new reply.', async () => {
     await expect(comments.addReply({
-      text: 'nice anime reply'
-    }, {
-      username: 'saitama',
-      email: 'onepunch@gmail.com'
-    }, {
-      username: 'senpai',
-      email: 'thisemailshouldwork@gmail.com'
-    }))
+        'author.username': 'senpai',
+      }, {
+        text: 'actually not so good anime.'
+      }, {
+        username: 'rofl',
+        email: 'test@gmail.com'
+      }))
       .resolves.toBeInstanceOf(ObjectID)
   })
 
@@ -72,7 +71,7 @@ describe('test comment functionality', () => {
   })
 
   it('Should update existing comment.', async () => {
-    await expect(comments.patch({ 
+    await expect(comments.patch({
       'author.username': 'senpai'
     }, {
       text: 'nice anime))0'
@@ -80,9 +79,16 @@ describe('test comment functionality', () => {
     .resolves.toBeInstanceOf(ObjectID)
   })
 
+  it('Should delete existing comment.', async () => {
+    await expect(comments.delete({
+      'author.username': 'baka'
+    }))
+    .resolves.toBeInstanceOf(ObjectID)
+  })
+
   it('Should switch comment\'s like.', async () => {
     await expect(comments.switchLike({
-      _id: ObjectID('5c48d9dde55443356a582495')
+      'author.username': 'senpai'
     }, {
       username: 'saitama',
       email: 'onepunch@gmail.com'
@@ -92,7 +98,7 @@ describe('test comment functionality', () => {
 
   it('Should switch comment\'s dislike.', async () => {
     await expect(comments.switchDislike({
-      _id: ObjectID('5c48d9dde55443356a582495')
+      'author.username': 'senpai'
     }, {
       username: 'baka',
       email: 'simpledude@gmail.com'
