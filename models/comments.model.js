@@ -27,9 +27,13 @@ module.exports = class {
     }
   }
 
-  async patch (where, fields) {
+  async patch (commentId, author, fields) {
     try {
-      const comment = await this.collection.findOne(where)
+      const query = {
+        _id: commentId,
+        'author.username': author.username
+      }
+      const comment = await this.collection.findOne(query)
       if (!comment) throw new NotFoundError({ message: 'Comment not found.' })
       const { _id } = comment
       await validate(schemaPath, fields)
@@ -40,13 +44,17 @@ module.exports = class {
     }
   }
 
-  async delete(where) {
+  async delete(commentId, author) {
     try {
-      const comment = await this.collection.findOne(where)
+      const query = {
+        _id: commentId,
+        'author.username': author.username
+      }
+      const comment = await this.collection.findOne(query)
       if (!comment) throw new NotFoundError({ message: 'Comment not found.' })
       const { _id } = comment
       await this.collection.deleteOne({ _id })
-      return _id
+      return true
     }
     catch (error) {
       handleError(error)

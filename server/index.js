@@ -1,9 +1,9 @@
 const express = require('express')
 const { ApolloServer } = require('apollo-server-express')
-const { MongoClient } = require('mongodb')
+const { MongoClient, ObjectId } = require('mongodb')
 
 const typeDefs = require('./schemas/index.schema')
-const resolvers = require('./resolvers/index.resolver')
+const resolvers = require('../resolvers/index.resolver')
 
 const { handleError } = require('../errors')
 
@@ -22,9 +22,10 @@ const { handleError } = require('../errors')
       context: () => ({
         db,
         user: {
-          username: 'baka',
+          username: 'senpai',
           email: 'thisemailshouldwork@gmail.com'
-        }
+        },
+        commentId: ObjectId('5c4c69c0add71b0483f1db38')
       })
     })
       .applyMiddleware({ app })

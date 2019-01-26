@@ -83,7 +83,7 @@ describe('test comment functionality', () => {
     await expect(comments.delete({
       'author.username': 'baka'
     }))
-    .resolves.toBeInstanceOf(ObjectID)
+    .resolves.toBe(true)
   })
 
   it('Should switch comment\'s like.', async () => {
