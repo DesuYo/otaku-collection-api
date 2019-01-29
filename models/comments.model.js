@@ -1,4 +1,4 @@
-const { Db } = require('mongodb')
+const { Db, ObjectId } = require('mongodb')
 const validate = require('../validation')
 const { NotFoundError, handleError } = require('../errors')
 
@@ -16,6 +16,7 @@ module.exports = class {
     try {
       await validate(schemaPath, doc)
       return (await this.collection.insertOne({
+        _id: ObjectId('5c4c69c0add71b0483f1db38'),
         ...doc,
         createdAt: new Date(),
         author
@@ -61,9 +62,9 @@ module.exports = class {
     }
   }
 
-  async addReply (where, fields, author) {
+  async addReply (commentId, author, fields) {
     try {
-      const comment = await this.collection.findOne(where)
+      const comment = await this.collection.findOne({ _id: commentId })
       if (!comment) throw new NotFoundError({ message: 'Comment not found.' })
       await validate(schemaPath, fields)
       const reply = {
@@ -80,16 +81,16 @@ module.exports = class {
     }
   }
 
-  async switchLike (where, author) {
+  async switchLike (commentId, author) {
     try {
-      const comment = await this.collection.findOne(where)
+      const comment = await this.collection.findOne({ _id: commentId })
       if (!comment) throw new NotFoundError({ message: 'Comment not found.' })
       const { _id } = comment
-      const like = await this.collection.find({ ...where, likes: author }).count()
+      const like = await this.collection.find({ _id, likes: author }).count()
       like 
       ? await this.collection.updateOne({ _id }, { $pull: { likes: author }})
       : await this.collection.updateOne({ _id }, { $push: { likes: author }})
-      const oppositeDislike = await this.collection.find({ ...where, dislikes: author }).count()
+      const oppositeDislike = await this.collection.find({ _id, dislikes: author }).count()
       if (oppositeDislike) await this.collection.updateOne({ _id }, { $pull: { dislikes: author }})
       return _id
     }
@@ -98,16 +99,16 @@ module.exports = class {
     }
   }
 
-  async switchDislike (where, author) {
+  async switchDislike (commentId, author) {
     try {
-      const comment = await this.collection.findOne(where)
+      const comment = await this.collection.findOne({ _id: commentId })
       if (!comment) throw new NotFoundError({ message: 'Comment not found.' })
       const { _id } = comment
-      const dislike = await this.collection.find({ ...where, dislikes: author }).count()
+      const dislike = await this.collection.find({ _id, dislikes: author }).count()
       dislike 
       ? await this.collection.updateOne({ _id }, { $pull: { dislikes: author }})
       : await this.collection.updateOne({ _id }, { $push: { dislikes: author }})
-      const oppositeLike = await this.collection.find({ ...where, likes: author }).count()
+      const oppositeLike = await this.collection.find({ _id, likes: author }).count()
       if (oppositeLike) await this.collection.updateOne({ _id }, { $pull: { likes: author }})
       return _id
     }
