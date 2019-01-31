@@ -8,6 +8,10 @@ module.exports = {
     async patchComment (_, args, { db, commentId, user }) {
       return (await new CommentsModel(db).patch(commentId, user, args)).toHexString()
     },
+    async getComments (_, args, { db }) {
+      const { limit } = args
+      return await new CommentsModel(db).get(limit)
+    },
     async deleteComment (_, __, { db, commentId, user }) {
       return await new CommentsModel(db).delete(commentId, user)
     }

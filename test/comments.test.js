@@ -70,6 +70,11 @@ describe('test comment functionality', () => {
     .resolves.toBeInstanceOf(ObjectID)
   })
 
+  it('Should get all comments.', async () => {
+    await expect(comments.get(10))
+      .resolves.toBeInstanceOf(Array)
+  })
+
   it('Should switch comment\'s like.', async () => {
     await expect(comments.switchLike(commentId, user))
     .resolves.toBeInstanceOf(ObjectID)

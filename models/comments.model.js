@@ -16,7 +16,8 @@ module.exports = class {
     try {
       await validate(schemaPath, doc)
       return (await this.collection.insertOne({
-        _id: ObjectId('5c4c69c0add71b0483f1db38'),
+        //FOR TESTING ONLY
+        //_id: ObjectId('5c4c69c0add71b0483f1db38'),
         ...doc,
         createdAt: new Date(),
         author
@@ -41,6 +42,17 @@ module.exports = class {
       await this.collection.updateOne({ _id }, { $set: fields })
       return _id
     } catch (error) {
+      handleError(error)
+    }
+  }
+
+  async get (limit) {
+    try {
+      return await this.collection.find()
+        .limit(limit)
+        .toArray()
+    }
+    catch (error) {
       handleError(error)
     }
   }

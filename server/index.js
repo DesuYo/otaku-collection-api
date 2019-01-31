@@ -25,7 +25,8 @@ const { handleError } = require('../errors')
           username: 'senpai',
           email: 'thisemailshouldwork@gmail.com'
         },
-        commentId: ObjectId('5c4c69c0add71b0483f1db38')
+        commentId: ObjectId('5c533903dffc0408fdbd97b8'),
+        genreId: ObjectId('5c534b7b0ee1a50b62bc145e')
       })
     })
       .applyMiddleware({ app })
