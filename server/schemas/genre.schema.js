@@ -6,10 +6,13 @@ module.exports = gql `
     description: String
   }
 
+  extend type Query {
+    getGenres(limit: Int!): [Genre]!
+  }
+  
   extend type Mutation {
     addGenre(name: String!, description: String!): ID!
     patchGenre(name: String, description: String): ID!
-    getGenres(limit: Int!): [Genre]!
     deleteGenre: Boolean!
   }
 `
