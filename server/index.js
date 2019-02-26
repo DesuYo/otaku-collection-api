@@ -36,7 +36,7 @@ const { handleError } = require('../errors')
         message: "Resource was not found"
       })
     })
-    app.listen(3502, () => console.log(`Server runs successfully on port 3502.`))
+    app.listen(process.env.PORT, () => console.log(`Server runs successfully on port ${process.env.PORT}.`))
   }
   catch (error) {
     handleError(error)
