@@ -1,6 +1,7 @@
 const express = require('express')
 const { ApolloServer } = require('apollo-server-express')
 const { ObjectId } = require('mongodb')
+const bodyParser = require('body-parser')
 
 const typeDefs = require('./schemas/index.schema')
 const resolvers = require('../resolvers/index.resolver')
@@ -33,12 +34,15 @@ const { handleError } = require('../errors')
     })
       .applyMiddleware({ app })
 
-    app.use((_, res) => {
+    app
+    .use(bodyParser.json())
+    .use(bodyParser.urlencoded({ extended: true }))
+    .use((_, res) => {
       return res.status(404).json({
         message: "Resource was not found"
       })
     })
-    app.listen(process.env.PORT, () => console.log(`Server runs successfully on port ${process.env.PORT}.`))
+    .listen(process.env.PORT, () => console.log(`Server runs successfully on port ${process.env.PORT}.`))
   }
   catch (error) {
     handleError(error)
