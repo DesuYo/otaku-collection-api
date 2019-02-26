@@ -1,6 +1,6 @@
 const express = require('express')
 const { ApolloServer } = require('apollo-server-express')
-const {  ObjectId } = require('mongodb')
+const { ObjectId } = require('mongodb')
 
 const typeDefs = require('./schemas/index.schema')
 const resolvers = require('../resolvers/index.resolver')
@@ -19,6 +19,8 @@ const { handleError } = require('../errors')
     new ApolloServer({
       typeDefs,
       resolvers,
+      introspection: true,
+      playground: true,
       context: () => ({
         //db,
         user: {
