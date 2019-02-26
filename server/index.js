@@ -1,6 +1,6 @@
 const express = require('express')
 const { ApolloServer } = require('apollo-server-express')
-const { MongoClient, ObjectId } = require('mongodb')
+//const { MongoClient, ObjectId } = require('mongodb')
 
 const typeDefs = require('./schemas/index.schema')
 const resolvers = require('../resolvers/index.resolver')
@@ -13,7 +13,7 @@ const { handleError } = require('../errors')
     //const { DB_URI, PORT } = process.env
     //const mongoClient = new MongoClient(DB_URI || 'mongodb://localhost:27017/test', 
       //{ useNewUrlParser: true })
-    const db = (await mongoClient.connect()).db()
+    //const db = (await mongoClient.connect()).db()
     const app = express()
 
     new ApolloServer({
