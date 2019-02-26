@@ -31,7 +31,7 @@ const { handleError } = require('../errors')
     })
       .applyMiddleware({ app })
 
-    app.use('/', (_, res) => {
+    app.use((_, res) => {
       return res.status(404).json({
         message: "Resource was not found"
       })
