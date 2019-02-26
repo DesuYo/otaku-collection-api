@@ -30,7 +30,12 @@ const { handleError } = require('../errors')
       })
     })
       .applyMiddleware({ app })
-    
+
+    app.use('/', (_, res) => {
+      return res.status(404).json({
+        message: "Resource was not found"
+      })
+    })
     app.listen(3502, () => console.log(`Server runs successfully on port 3502.`))
   }
   catch (error) {
