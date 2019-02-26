@@ -10,9 +10,9 @@ const { handleError } = require('../errors')
 ;(async () => {
   try {
     require('dotenv').config()
-    const { DB_URI, PORT } = process.env
-    const mongoClient = new MongoClient(DB_URI || 'mongodb://localhost:27017/test', 
-      { useNewUrlParser: true })
+    //const { DB_URI, PORT } = process.env
+    //const mongoClient = new MongoClient(DB_URI || 'mongodb://localhost:27017/test', 
+      //{ useNewUrlParser: true })
     const db = (await mongoClient.connect()).db()
     const app = express()
 
@@ -20,7 +20,7 @@ const { handleError } = require('../errors')
       typeDefs,
       resolvers,
       context: () => ({
-        db,
+        //db,
         user: {
           username: 'senpai',
           email: 'thisemailshouldwork@gmail.com'
