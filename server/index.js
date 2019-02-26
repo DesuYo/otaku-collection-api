@@ -31,7 +31,7 @@ const { handleError } = require('../errors')
     })
       .applyMiddleware({ app })
     
-    app.listen(1025, () => console.log(`Server runs successfully on port 1025.`))
+    app.listen(80, () => console.log(`Server runs successfully on port 80.`))
   }
   catch (error) {
     handleError(error)
