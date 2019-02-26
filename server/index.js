@@ -9,7 +9,7 @@ const { handleError } = require('../errors')
 
 ;(async () => {
   try {
-    require('dotenv').config()
+    //require('dotenv').config()
     //const { DB_URI, PORT } = process.env
     //const mongoClient = new MongoClient(DB_URI || 'mongodb://localhost:27017/test', 
       //{ useNewUrlParser: true })
