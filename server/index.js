@@ -1,7 +1,5 @@
 const express = require('express')
 const { ApolloServer } = require('apollo-server-express')
-const { ObjectId } = require('mongodb')
-const bodyParser = require('body-parser')
 
 const typeDefs = require('./schemas/index.schema')
 const resolvers = require('../resolvers/index.resolver')
@@ -11,10 +9,10 @@ const { handleError } = require('../errors')
 ;(async () => {
   try {
     //require('dotenv').config()
-    //const { DB_URI, PORT } = process.env
-    //const mongoClient = new MongoClient(DB_URI || 'mongodb://localhost:27017/test', 
-      //{ useNewUrlParser: true })
-    //const db = (await mongoClient.connect()).db()
+    const { DB_URI, PORT } = process.env
+    const mongoClient = new MongoClient(DB_URI || 'mongodb://localhost:27017/test', 
+      { useNewUrlParser: true })
+    const db = (await mongoClient.connect()).db()
     const app = express()
 
     new ApolloServer({
@@ -23,26 +21,18 @@ const { handleError } = require('../errors')
       introspection: true,
       playground: true,
       context: () => ({
-        //db,
-        user: {
-          username: 'senpai',
-          email: 'thisemailshouldwork@gmail.com'
-        },
-        commentId: ObjectId('5c533903dffc0408fdbd97b8'),
-        genreId: ObjectId('5c534b7b0ee1a50b62bc145e')
+        db
       })
     })
       .applyMiddleware({ app })
 
     app
-    .use(bodyParser.json())
-    .use(bodyParser.urlencoded({ extended: true }))
     .use((_, res) => {
       return res.status(404).json({
         message: "Resource was not found"
       })
     })
-    .listen(process.env.PORT, () => console.log(`Server runs successfully on port ${process.env.PORT}.`))
+    .listen(process.env.PORT, () => console.log(`Server runs successfully on port ${PORT}.`))
   }
   catch (error) {
     handleError(error)
