@@ -1,4 +1,5 @@
 const express = require('express')
+const { MongoClient } = require('mongodb')
 const { ApolloServer } = require('apollo-server-express')
 
 const typeDefs = require('./schemas/index.schema')
