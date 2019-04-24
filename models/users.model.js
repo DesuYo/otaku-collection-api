@@ -11,6 +11,7 @@ module.exports = class {
    */
   constructor (dbInstance) {
     this.collection = dbInstance.collection('users')
+    await this.initIndexes()
   }
 
   async initIndexes () {

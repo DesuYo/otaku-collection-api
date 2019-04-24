@@ -22,7 +22,10 @@ const { handleError } = require('../errors')
       introspection: true,
       playground: true,
       context: () => ({
-        db
+        db,
+        user: {
+          username: 'senpai'
+        }
       })
     })
       .applyMiddleware({ app })
