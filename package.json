@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "jest --detectOpenHandles",
+    "test": "jest test/anime.test.js --detectOpenHandles",
     "start": "node server/index.js"
   },
   "keywords": [],

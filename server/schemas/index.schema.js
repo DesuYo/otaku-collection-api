@@ -1,7 +1,7 @@
 const { gql } = require('apollo-server-express')
 
 const Comment = require('./comment.schema')
-const Genre = require('./genre.schema')
+const Anime = require('./anime.schema')
 const outputPayload = require('./outputPayload.schema')
 
 module.exports = [
@@ -10,6 +10,6 @@ module.exports = [
     type Mutation { _: Int }
   `,
   Comment,
-  Genre,
+  Anime,
   outputPayload
 ]

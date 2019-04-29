@@ -1,14 +1,14 @@
 const comment = require('./comment.resolver')
-const genre = require('./genre.resolver')
+const anime = require('./anime.resolver')
 const outputPayload = require('./outputPayload.resolver')
 
 module.exports = {
   Query: {
-    ...genre.queries,
+    ...anime.queries,
     ...outputPayload.queries
   },
   Mutation: {
-    ...comment.mutations,
-    ...genre.mutations
+    ...anime.mutations,
+    ...comment.mutations
   }
 }

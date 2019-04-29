@@ -4,7 +4,7 @@ const { ValidationError } = require('../errors')
 ajv.addSchema([
   require('./user.draft.json'),
   require('./comment.draft.json'),
-  require('./genre.draft.json')
+  ...require('./anime')
   //...
 ])
 
